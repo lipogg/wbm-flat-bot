@@ -1,6 +1,5 @@
 import logging
 from pathlib import Path
-from logging.handlers import TimedRotatingFileHandler
 
 def setup_loggers():
     Path("logs").mkdir(exist_ok=True)
@@ -9,24 +8,12 @@ def setup_loggers():
         "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
     )
 
-    # Timed rotation for app.log: every 7 days
-    app_handler = TimedRotatingFileHandler(
-        "logs/app.log",
-        when="d",
-        interval=7,
-        backupCount=30,
-        encoding="utf-8"
-    )
+    # File handler for app.log
+    app_handler = logging.FileHandler("logs/app.log", encoding="utf-8")
     app_handler.setFormatter(formatter)
 
-    # Timed rotation for flats.log: every 7 days
-    flats_handler = TimedRotatingFileHandler(
-        "logs/flats.log",
-        when="d",
-        interval=7,
-        backupCount=30,
-        encoding="utf-8"
-    )
+    # File handler for flats.log
+    flats_handler = logging.FileHandler("logs/flats.log", encoding="utf-8")
     flats_handler.setFormatter(formatter)
 
     # Set up the 'app' logger

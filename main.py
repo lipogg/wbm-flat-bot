@@ -7,12 +7,12 @@ logger = logging.getLogger("app")
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from wbmbot import User, UserInput, FlatScraper, ApplicationManager
+from wbmbot import User, ConfigLoader, FlatScraper, ApplicationManager
 
 
 def main():
     # Load or interactively collect user data/configuration
-    user_input = UserInput(config_path="config.yaml")
+    user_input = ConfigLoader(config_path="config.yaml")
     user_data = user_input.load_user_data()
     user = User(user_data)
 

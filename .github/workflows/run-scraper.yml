@@ -2,7 +2,7 @@ name: Scheduled WBM Scraper Run
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/5 6-19 * * 1-5'
   workflow_dispatch:
 
 jobs:

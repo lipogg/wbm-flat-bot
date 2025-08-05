@@ -17,15 +17,6 @@ class FlatScraper:
         self._accept_cookies()
         self._scroll_to_footer()
 
-    def _accept_cookies(self):
-        if self.driver.find_elements(By.CLASS_NAME, 'cn-buttons'):
-            logger.info("Accepting cookies...")
-            self.driver.find_element(By.CLASS_NAME, 'cn-decline').click()
-
-    def _scroll_to_footer(self):
-        footer = self.driver.find_element(By.TAG_NAME, 'footer')
-        ActionChains(self.driver).scroll_to_element(footer).perform()
-
     def get_flats(self):
         logger.info("Searching flats...")
         flat_elements = self.driver.find_elements(By.CSS_SELECTOR, ".row.openimmo-search-list-item")
@@ -46,6 +37,14 @@ class FlatScraper:
         detail_attrs = self._extract_detail_attributes()
         return detail_attrs
 
+    def _accept_cookies(self):
+        if self.driver.find_elements(By.CLASS_NAME, 'cn-buttons'):
+            logger.info("Accepting cookies...")
+            self.driver.find_element(By.CLASS_NAME, 'cn-decline').click()
+
+    def _scroll_to_footer(self):
+        footer = self.driver.find_element(By.TAG_NAME, 'footer')
+        ActionChains(self.driver).scroll_to_element(footer).perform()
 
     def _extract_summary_attributes(self, flat_elem):
         # Extract title, total rent, size, rooms, zip_code, property attributes summary from flat_elem, link to detail page

@@ -15,6 +15,29 @@ class Flat:
         # Compute hash for deduplication
         self.hash = self._compute_hash()
 
+    def matches_criteria(self, user):
+        if self.total_rent is None or self.rooms is None or self.base_rent is None:
+            return False
+        if self.total_rent > user.max_rent:
+            return False
+        if self.rooms < user.min_rooms:
+            return False
+        if self.size < user.min_sqm:
+            return False
+        if user.kw_filter and not all(
+                keyword in " ".join(self.property_attrs).lower() for keyword in user.kw_filter):
+            return False
+        if user.loc_filter and not any(
+                self.zip_code.startswith(prefix.strip()) for prefix in user.loc_filter if prefix.strip()):
+            return False
+
+        return True
+
+    def within_range(self, user):
+        if not (0.15 * user.net_income <= self.base_rent <= 0.30 * user.net_income):
+            return False
+        return True
+
     def update_details(self, detail_attrs: dict):
         # Update or add attributes only available from detail page
         if "base_rent" in detail_attrs:
@@ -45,30 +68,6 @@ class Flat:
     def _extract_zip(text):
         match = re.search(r'\b\d{5}\b', text)
         return match.group() if match else ""
-
-
-    def matches_criteria(self, user):
-        if self.total_rent is None or self.rooms is None or self.base_rent is None:
-            return False
-        if self.total_rent > user.max_rent:
-            return False
-        if self.rooms < user.min_rooms:
-            return False
-        if self.size < user.min_sqm:
-            return False
-        if user.kw_filter and not all(
-                keyword in " ".join(self.property_attrs).lower() for keyword in user.kw_filter):
-            return False
-        if user.loc_filter and not any(
-                self.zip_code.startswith(prefix.strip()) for prefix in user.loc_filter if prefix.strip()):
-            return False
-
-        return True
-
-    def within_range(self, user):
-        if not (0.15 * user.net_income <= self.base_rent <= 0.30 * user.net_income):
-            return False
-        return True
 
 
 class User:

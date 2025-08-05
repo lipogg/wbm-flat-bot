@@ -1,25 +1,24 @@
+import os
 import yaml
 import logging
-from pathlib import Path
 
 logger = logging.getLogger("app")
 
 class ConfigLoader:
-    def __init__(self, config_path="config.yaml"):
-        self.config_path = Path(config_path)
+    def __init__(self, config_var="USER_CONFIG"):
+        self.config_var = config_var
 
     def load_user_data(self):
-        # read in config file if exists
-        if self.config_path.is_file():
-            logger.info(f"Loading config from {self.config_path}...")
-            with self.config_path.open("r") as f:
-                try:
-                    config = yaml.safe_load(f)
-                except yaml.YAMLError as e:
-                    print(f"[{date()}] YAML error: {e}")
-                    raise
-        else:
-            logger.info(f"No config file found. Terminating...")
-            raise FileNotFoundError(f"{self.config_path} does not exist.")
+        # read in config environment variable from GitHub secrets if exists
+        config_string = os.environ.get(self.config_var)
+        if not config_string:
+            logger.error(f"Environment variable '{self.config_var}' is not set. Please set variable as a GitHub secret and try again.")
+            raise ValueError(f"Missing environment variable '{self.config_var}'")
+        logger.info("Loading config from GitHub secret...")
+        try:
+            config = yaml.safe_load(config_string)
+        except yaml.YAMLError as e:
+            logger.error(f"YAML error while parsing user config variable: {e}")
+            raise
 
         return config

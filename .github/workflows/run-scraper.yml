@@ -8,6 +8,8 @@ on:
 jobs:
   run-scraper:
     runs-on: ubuntu-latest
+    env:
+      USER_CONFIG: ${{ secrets.USER_CONFIG }}
 
     steps:
       - uses: actions/checkout@v4

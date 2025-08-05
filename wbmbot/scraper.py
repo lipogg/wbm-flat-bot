@@ -2,7 +2,7 @@ import logging
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.common.exceptions import NoSuchElementException
-from .models import Flat
+from .flat import Flat
 
 logger = logging.getLogger("app")
 

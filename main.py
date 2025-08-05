@@ -12,7 +12,7 @@ from wbmbot import User, ConfigLoader, FlatScraper, ApplicationManager
 
 def main():
     # Load or interactively collect user data/configuration
-    user_input = ConfigLoader(config_path="config.yaml")
+    user_input = ConfigLoader(config_var="USER_CONFIG")
     user_data = user_input.load_user_data()
     user = User(user_data)
 

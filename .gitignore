@@ -1,0 +1,12 @@
+# Python virtual environments
+.venv/
+__pycache__/
+
+# PyCharm / JetBrains IDE settings
+.idea/
+
+# Python version file (used by pyenv/uv/etc.)
+.python-version
+
+# Logs
+logs/

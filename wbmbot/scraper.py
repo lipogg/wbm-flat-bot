@@ -29,6 +29,8 @@ class FlatScraper:
     def get_flats(self):
         logger.info("Searching flats...")
         flat_elements = self.driver.find_elements(By.CSS_SELECTOR, ".row.openimmo-search-list-item")
+        if not flat_elements:
+            logger.info("No flats available.")
         flats = []
         for elem in flat_elements:
             # Extract summary attributes

@@ -1,0 +1,17 @@
+email: johndoe@example.com
+first_name: John
+last_name: Doe
+kw_filter: ['Balkon', 'Aufzug']
+loc_filter:
+- '10'
+- '120'
+- '121'
+- '124'
+- '1419'
+- '140'
+- '133'
+max_rent: '1300'
+min_rooms: '2'
+min_sqm: '50'
+net_income: '4400'
+wbs: 'no'

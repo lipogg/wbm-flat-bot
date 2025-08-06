@@ -23,10 +23,20 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --all-extras --dev
 
+      - name: Remove preinstalled Chrome
+        run: |
+          sudo rm -f /usr/bin/google-chrome
+
       - name: Set up Chrome
+        id: setup-chrome
         uses: browser-actions/setup-chrome@v2
         with:
           install-chromedriver: true
+      
+      - name: Add Chrome and ChromeDriver to PATH
+        run: |
+          echo "$(dirname "${{ steps.setup-chrome.outputs.chrome-path }}")" >> $GITHUB_PATH
+          echo "$(dirname "${{ steps.setup-chrome.outputs.chromedriver-path }}")" >> $GITHUB_PATH
 
       - name: Run scraper
         run: uv run main.py

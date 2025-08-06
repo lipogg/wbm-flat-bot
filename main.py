@@ -21,6 +21,10 @@ def main():
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-gpu")
     options.add_argument("--headless=new")
+    options.add_argument("--no-first-run")
+    options.add_argument("--no-default-browser-check")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     options.add_argument('--log-level=3')
 
     with webdriver.Chrome(options=options) as driver:

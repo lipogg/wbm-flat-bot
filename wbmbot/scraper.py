@@ -16,6 +16,7 @@ class FlatScraper:
         self.driver.get(self.start_url)
         self._accept_cookies()
         self._scroll_to_footer()
+        return self.driver.page_source  # for testing
 
     def get_flats(self):
         logger.info("Searching flats...")

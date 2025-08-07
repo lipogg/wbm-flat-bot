@@ -16,8 +16,6 @@ class Flat:
         self.hash = self._compute_hash()
 
     def matches_criteria(self, user):
-        if self.total_rent is None or self.rooms is None or self.base_rent is None:
-            return False
         if self.total_rent > user.max_rent:
             return False
         if self.rooms < user.min_rooms:

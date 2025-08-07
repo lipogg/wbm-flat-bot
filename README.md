@@ -16,7 +16,8 @@ This bot tries to scrape flats responsibly by offering more filter options than 
 
 1. Fork this repo 
 2. In your forked repository, go to *Settings* -> *Secrets and variables* -> *Actions* -> *Secrets* and set up a new *Repository secret* called `USER_CONFIG`. Paste the content of the sample config.yaml file in the window and adapt to your needs (replace email, name, search criteria). 
-3. Go to repository *Actions* tab and verify that everything is running correctly. It may take a few minutes until the scheduled run is triggered, but you can also trigger the run manually if you don't want to wait. Once the first run is complete, click on the run, scroll down to *Artifacts* and download logs (the artifact is called `scraper-logs`). `flats.log` contains flats that have been applied to. This is empty if no flats were found. `app.log` logs scraping process and flats that did not match criteria. 
+3. Remove comments in front of "schedule" and "- cron: '*/5 6-19 * * 1-5'" in the file `.github/workflows/run-scraper.yml` 
+4. Go to repository *Actions* tab and verify that everything is running correctly. It may take a few minutes until the scheduled run is triggered, but you can also trigger the run manually if you don't want to wait. Once the first run is complete, click on the run, scroll down to *Artifacts* and download logs (the artifact is called `scraper-logs`). `flats.log` contains flats that have been applied to. This is empty if no flats were found. `app.log` logs scraping process and flats that did not match criteria. 
 
 Although the workflow is scheduled to run every 5 minutes, GitHub Actions may experience server-side delays, so the actual interval is closer to 15 minutes.
 

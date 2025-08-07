@@ -5,11 +5,11 @@ class Flat:
     def __init__(self, attributes: dict):
         self.detail_link = attributes.get("detail_url", "")
         self.title = attributes.get("title", "")
-        self.total_rent = self._clean_currency(attributes.get("total_rent", 0.0))
-        self.base_rent = self._clean_currency(attributes.get("base_rent", 0.0))
-        self.size = self._clean_float(attributes.get("size", 0.0))
-        self.rooms = self._clean_float(attributes.get("rooms", 0.0))
-        self.zip_code = self._extract_zip(attributes.get("zip_code", ""))
+        self.total_rent = self._parse_currency(attributes.get("total_rent", 0.0))
+        self.base_rent = self._parse_currency(attributes.get("base_rent", 0.0))
+        self.size = self._parse_sqm(attributes.get("size", 0.0))
+        self.rooms = self._parse_sqm(attributes.get("rooms", 0.0))
+        self.zip_code = self._extract_zipcode(attributes.get("zip_code", ""))
         self.property_attrs = [attr.lower() for attr in attributes.get("property_attrs", [])]
         self.wbs = any("wbs" in attr for attr in self.property_attrs)
         # Compute hash for deduplication
@@ -41,7 +41,7 @@ class Flat:
     def update_details(self, detail_attrs: dict):
         # Update or add attributes only available from detail page
         if "base_rent" in detail_attrs:
-            self.base_rent = self._clean_currency(detail_attrs.get("base_rent", ""))
+            self.base_rent = self._parse_currency(detail_attrs.get("base_rent", ""))
         if "detail_url" in detail_attrs:
             self.detail_link = detail_attrs.get("detail_url", "")
         # can be extended to retrieve more attributes from details page
@@ -51,20 +51,20 @@ class Flat:
         return hashlib.sha256(hash_input.encode('utf-8')).hexdigest()
 
     @staticmethod
-    def _clean_currency(value):
+    def _parse_currency(value):
         try:
             return float(value.replace("€", "").replace("EUR", "").replace(".", "").replace(",", ".").strip())
         except (ValueError, AttributeError):
             return None
 
     @staticmethod
-    def _clean_float(value):
+    def _parse_sqm(value):
         try:
             return float(value.replace("m²", "").replace(",", ".").strip())
         except (ValueError, AttributeError):
             return None
 
     @staticmethod
-    def _extract_zip(text):
+    def _extract_zipcode(text):
         match = re.search(r'\b\d{5}\b', text)
         return match.group() if match else ""

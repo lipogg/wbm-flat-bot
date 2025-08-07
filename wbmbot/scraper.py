@@ -48,14 +48,14 @@ class FlatScraper:
 
     def _extract_summary_attributes(self, flat_elem):
         # Extract title, total rent, size, rooms, zip_code, property attributes summary from flat_elem, link to detail page
-        title = self._find_element_safe(flat_elem, By.CLASS_NAME, 'imageTitle')
-        total_rent = self._find_element_safe(flat_elem, By.CLASS_NAME, 'main-property-rent')
-        size = self._find_element_safe(flat_elem, By.CLASS_NAME, 'main-property-size')
-        rooms = self._find_element_safe(flat_elem, By.CLASS_NAME, 'main-property-rooms')
-        zip_code = self._find_element_safe(flat_elem, By.CLASS_NAME, 'address')
+        title = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'imageTitle')
+        total_rent = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'main-property-rent')
+        size = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'main-property-size')
+        rooms = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'main-property-rooms')
+        zip_code = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'address')
         property_attrs_elems = flat_elem.find_elements(By.XPATH, './/ul[@class="check-property-list"]/li')
-        property_attrs = [elem.text for elem in property_attrs_elems]
-        detail_link = flat_elem.find_element(By.XPATH, '//*[@title="Details"]').get_attribute('href') # always exists, no safeguard here
+        property_attrs = [elem.text for elem in property_attrs_elems] # empty list if none found
+        detail_link = _find_element_attr_safe(flat_elem, By.XPATH, '//*[@title="Details"]', attr='href')
 
         return {
             "title": title,
@@ -69,15 +69,24 @@ class FlatScraper:
 
     def _extract_detail_attributes(self):
         # Extract the detail page specific fields like base_rent and others
-        base_rent = self._find_element_safe(self.driver, By.CLASS_NAME, 'openimmo-detail__rental-costs-list-item-value')
+        base_rent = self._find_element_text_safe(self.driver, By.CLASS_NAME, 'openimmo-detail__rental-costs-list-item-value')
         return {
             "base_rent": base_rent,
             # maybe add floor here
         }
 
     @staticmethod
-    def _find_element_safe(elem, by, value, fallback=""):
+    def _find_element_text_safe(elem, by, value, fallback=""):
         try:
             return elem.find_element(by, value).text
         except NoSuchElementException:
             return fallback
+
+    @staticmethod
+    def _find_element_attr_safe(elem, by, value, attr, fallback=""):
+        try:
+            return elem.find_element(by, value).get_attribute(attr)
+        except NoSuchElementException:
+            return fallback
+
+

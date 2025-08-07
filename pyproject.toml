@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "pytest>=8.4.1",
+    "pytest-mock>=3.14.1",
     "pyyaml>=6.0.2",
     "selenium>=4.34.2",
 ]

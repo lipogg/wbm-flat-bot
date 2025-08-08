@@ -44,7 +44,7 @@ def main():
         # Iterate over flats and apply if they match user criteria
         for flat in flats:
             if flat.matches_criteria(user):
-                flat_details = scraper.get_details(flat)
+                flat_details = scraper.get_details(flat.detail_link)
                 flat.update_details(flat_details)
                 if flat.within_range(user):
                     logger.info(f"Flat {flat.title} matches criteria... applying...")

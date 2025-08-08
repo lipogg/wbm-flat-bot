@@ -56,7 +56,7 @@ class FlatScraper:
         zip_code = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'address')
         property_attrs_elems = flat_elem.find_elements(By.XPATH, './/ul[@class="check-property-list"]/li')
         property_attrs = [elem.text for elem in property_attrs_elems] # empty list if none found
-        detail_link = _find_element_attr_safe(flat_elem, By.XPATH, '//*[@title="Details"]', attr='href')
+        detail_link = self._find_element_attr_safe(flat_elem, By.XPATH, '//*[@title="Details"]', attr='href')
 
         return {
             "title": title,

@@ -46,5 +46,4 @@ class ApplicationManager:
             f"wbs: {flat.wbs}\n"
             f"property attributes: {', '.join(flat.property_attrs)}\n"
             f"hash: {flat.hash}\n"
-            f"user email: {self.user.email.strip()}\n\n"
         )

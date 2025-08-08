@@ -7,6 +7,3 @@ __pycache__/
 
 # Python version file (used by pyenv/uv/etc.)
 .python-version
-
-# Logs
-logs/

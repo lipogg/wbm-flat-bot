@@ -40,10 +40,8 @@ class ApplicationManager:
             f"Application sent:\n"
             f"{flat.title}\n"
             f"zip code: {flat.zip_code}\n"
-            f"total rent: {flat.total_rent}\n"
             f"flat size: {flat.size}\n"
             f"rooms: {flat.rooms}\n"
-            f"wbs: {flat.wbs}\n"
             f"property attributes: {', '.join(flat.property_attrs)}\n"
             f"hash: {flat.hash}\n"
         )

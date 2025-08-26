@@ -2,6 +2,8 @@ import logging
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from .flat import Flat
 
 logger = logging.getLogger("app")
@@ -10,6 +12,7 @@ class FlatScraper:
     def __init__(self, driver, start_url):
         self.driver = driver
         self.start_url = start_url
+        self.wait = WebDriverWait(self.driver, 10)
 
     def load_start_page(self):
         logger.info(f"Connecting to {self.start_url}")
@@ -44,11 +47,12 @@ class FlatScraper:
             self.driver.find_element(By.CLASS_NAME, 'cn-decline').click()
 
     def _scroll_to_footer(self):
-        footer = self.driver.find_element(By.TAG_NAME, 'footer')
+        footer = self.wait.until(EC.visibility_of_element_located((By.TAG_NAME, 'footer')))
         ActionChains(self.driver).scroll_to_element(footer).perform()
 
     def _extract_summary_attributes(self, flat_elem):
         # Extract title, total rent, size, rooms, zip_code, property attributes summary from flat_elem, link to detail page
+        self.wait.until(EC.presence_of_element_located((By.XPATH, './/*[@title="Details"]')))
         title = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'imageTitle')
         total_rent = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'main-property-rent')
         size = self._find_element_text_safe(flat_elem, By.CLASS_NAME, 'main-property-size')

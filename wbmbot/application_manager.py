@@ -2,6 +2,8 @@ import os
 import logging
 from pathlib import Path
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 logger_app = logging.getLogger("app")
 logger_flats = logging.getLogger("flats")
@@ -11,6 +13,7 @@ class ApplicationManager:
         self.driver = driver
         self.user = user
         self.log_path = Path(log_path)
+        self.wait = WebDriverWait(self.driver, 10)
 
     def has_applied(self, flat_hash):
         with self.log_path.open("r", encoding="utf-8") as logfile:
@@ -27,13 +30,16 @@ class ApplicationManager:
         return True
 
     def _fill_form_and_submit(self, flat):
-        # works only if form is opened on flat's detail page already loaded in driver
-        self.driver.find_element(By.XPATH, '//a[@class="openimmo-detail__contact-box-button btn scrollLink"]').click()
+        # assumes flat's detail page is already loaded in driver
+        scroll_to_form_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@class="openimmo-detail__contact-box-button btn scrollLink"]')))
+        scroll_to_form_btn.click()
         self.driver.find_element(By.XPATH, '//*[@id="powermail_field_name"]').send_keys(self.user.last_name)
         self.driver.find_element(By.XPATH, '//*[@id="powermail_field_vorname"]').send_keys(self.user.first_name)
         self.driver.find_element(By.XPATH, '//*[@id="powermail_field_e_mail"]').send_keys(self.user.email)
-        self.driver.find_element(By.XPATH, '//label[@for="powermail_field_datenschutzhinweis_1"]').click() # (By.XPATH, '//input[@id="powermail_field_datenschutzhinweis_1"]').click()
-        self.driver.find_element(By.XPATH, '//button[@class="btn btn-primary" and @type="submit"]').click()
+        checkbox = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//label[@for="powermail_field_datenschutzhinweis_1"]')))
+        checkbox.click()
+        submit_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="btn btn-primary" and @type="submit"]')))
+        submit_btn.click()
 
     def _log_application(self, flat):
         logger_flats.info(

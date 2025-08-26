@@ -28,7 +28,7 @@ def main():
     options.add_argument('--log-level=3')
 
     with webdriver.Chrome(options=options) as driver:
-        driver.implicitly_wait(5)
+
         start_url = "https://www.wbm.de/wohnungen-berlin/angebote/"
 
         # Initialize application handler

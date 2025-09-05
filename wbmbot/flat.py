@@ -22,6 +22,8 @@ class Flat:
             return False
         if self.size < user.min_sqm:
             return False
+        if user.wbs != self.wbs:
+            return False
         if user.kw_filter and not all(
                 keyword in " ".join(self.property_attrs).lower() for keyword in user.kw_filter):
             return False

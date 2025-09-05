@@ -17,7 +17,7 @@ class User:
         # Convert user input to boolean
         if isinstance(value, bool):
             return value
-        return 'yes' in str(value).lower()
+        return str(value).lower() == 'yes'
 
     @staticmethod
     def _parse_float(value):

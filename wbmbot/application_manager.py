@@ -1,4 +1,5 @@
 import os
+import time
 import logging
 from pathlib import Path
 from selenium.webdriver.common.by import By
@@ -33,11 +34,19 @@ class ApplicationManager:
         # assumes flat's detail page is already loaded in driver
         scroll_to_form_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//a[@class="openimmo-detail__contact-box-button btn scrollLink"]')))
         scroll_to_form_btn.click()
-        self.driver.find_element(By.XPATH, '//*[@id="powermail_field_name"]').send_keys(self.user.last_name)
-        self.driver.find_element(By.XPATH, '//*[@id="powermail_field_vorname"]').send_keys(self.user.first_name)
-        self.driver.find_element(By.XPATH, '//*[@id="powermail_field_e_mail"]').send_keys(self.user.email)
+        time.sleep(1.2)
+        name_field = self.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="powermail_field_name"]')))
+        name_field.send_keys(self.user.last_name)
+        time.sleep(0.5)
+        vorname_field = self.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="powermail_field_vorname"]')))
+        vorname_field.send_keys(self.user.first_name)
+        time.sleep(1)
+        email_field = self.wait.until(EC.visibility_of_element_located((By.XPATH, '//*[@id="powermail_field_e_mail"]')))
+        email_field.send_keys(self.user.email)
+        time.sleep(1.2)
         checkbox = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//label[@for="powermail_field_datenschutzhinweis_1"]')))
         checkbox.click()
+        time.sleep(0.5)
         submit_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@class="btn btn-primary" and @type="submit"]')))
         submit_btn.click()
 
